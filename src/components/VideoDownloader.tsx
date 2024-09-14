@@ -54,12 +54,12 @@ const VideoDownloader: React.FC = () => {
         setError('');
         setProgress(0);
         setEstimatedTime(null);
-        setVideoInfo(null); // Clear video info to avoid showing stale info during download
+        setVideoInfo(null);
 
         try {
             const response = await axios.post(
                 'http://localhost:5000/download',
-                { url, title: videoInfo?.title }, // Use video title to name the downloaded file
+                { url, title: videoInfo?.title },
                 {
                     responseType: 'blob',
                     headers: {
