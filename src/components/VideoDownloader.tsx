@@ -8,6 +8,7 @@ const VideoDownloader: React.FC = () => {
     const [url, setUrl] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [videoInfo, setVideoInfo] = useState<any>(null);
     const [progress, setProgress] = useState(0);
     const [estimatedTime, setEstimatedTime] = useState<string | null>(null);
@@ -21,6 +22,7 @@ const VideoDownloader: React.FC = () => {
     const fetchVideoInfo = async (url: string) => {
         setLoading(true);
         setError('');
+       
         try {
             const response = await axios.post('http://localhost:5000/video-info', { url }, {
                 headers: {
@@ -35,6 +37,7 @@ const VideoDownloader: React.FC = () => {
             setVideoInfo({
                 ...response.data,
             });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(`Error fetching video info: ${err.message}`);
             toast.error(`Invalid URL: ${err.message}`);
@@ -71,10 +74,14 @@ const VideoDownloader: React.FC = () => {
                         const percent = Math.floor((current / total) * 100);
 
                         setProgress(percent);
-
+                        
+                        if (percent === 100) {
+                            setEstimatedTime(null);
+                        } else {
+                            const startTime = new Date().getTime();
        
-                        if (total > 0) {
-                            const elapsedTime = (new Date().getTime() - (progressEvent.startTime || new Date().getTime())) / 1000;
+                            const elapsedTime = (new Date().getTime() - startTime) / 1000;
+                            // const elapsedTime = (new Date().getTime() - (progressEvent.startTime || new Date().getTime())) / 1000;
                             const totalTime = (elapsedTime / (current / total));
                             const remainingTime = Math.max(totalTime - elapsedTime, 0);
                             setEstimatedTime(formatTime(remainingTime));
@@ -105,6 +112,7 @@ const VideoDownloader: React.FC = () => {
 
             toast.success('Download completed successfully!');
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(`Error downloading video: ${err.message}`);
             toast.error(`Error downloading video: ${err.message}`);
@@ -117,6 +125,7 @@ const VideoDownloader: React.FC = () => {
         try {
             const clipboardText = await navigator.clipboard.readText();
             setUrl(clipboardText);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             toast.error('Failed to paste from clipboard');
         }
