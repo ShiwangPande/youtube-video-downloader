@@ -24,7 +24,7 @@ const VideoDownloader: React.FC = () => {
         setError('');
        
         try {
-            const response = await axios.post('http://localhost:5000/video-info', { url }, {
+            const response = await axios.post('youtube-video-downloader-backend-production.up.railway.app/video-info', { url }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -61,7 +61,7 @@ const VideoDownloader: React.FC = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/download',
+                'youtube-video-downloader-backend-production.up.railway.app/download',
                 { url, title: videoInfo?.title },
                 {
                     responseType: 'blob',
